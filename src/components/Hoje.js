@@ -20,7 +20,6 @@ export default function Hoje() {
         const doneHabits = habits.filter((h) => h.done).length;
         let percentage;
    
-
     if(habits.length === 0){
         percentage = 0;
     } else {
@@ -52,8 +51,8 @@ export default function Hoje() {
             <Topo />
             <DivContainer>
                 <Container>
-                    <Title>{dia}</Title>
-                    <p color={value === 0}>{value && value === 0
+                    <Title data-test="today">{dia}</Title>
+                    <p color={value === 0} data-test="today-counter">{value && value === 0
                         ?
                         "Nenhum hábito concluído ainda"
                         :
@@ -67,15 +66,16 @@ export default function Hoje() {
                 ) : (
                     todayHabits.map((habit) => (
                         <HabitContainer
+                            data-test="today-habit-container"
                             key={habit.id}
                             done={habit.done}
                         >
                             <div>
-                                <HabitName>{habit.name}</HabitName>
-                                <HabitSequence>{`Sequência atual: ${habit.currentSequence} dia(s)`}</HabitSequence>
-                                <HabitSequence>{`Seu recorde: ${habit.highestSequence} dia(s)`}</HabitSequence>
+                                <HabitName data-test="today-habit-name">{habit.name}</HabitName>
+                                <HabitSequence data-test="today-habit-sequence">{`Sequência atual: ${habit.currentSequence} dia(s)`}</HabitSequence>
+                                <HabitSequence data-test="today-habit-record">{`Seu recorde: ${habit.highestSequence} dia(s)`}</HabitSequence>
                             </div>
-                            <button onClick={() => handleCheck(habit)}>
+                            <button onClick={() => handleCheck(habit)} data-test="today-habit-check-btn">
                                 <ion-icon name="checkbox"></ion-icon>
                             </button>
                         </HabitContainer>

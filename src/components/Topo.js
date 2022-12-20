@@ -11,7 +11,7 @@ export default function Topo() {
         const image = JSON.parse(savedImage).data.image;
 
         return (
-            <Header>
+            <Header data-test="header">
                 <h1>TrackIt</h1>
                 <img src={image} alt="imagem usuario" />
             </Header>
@@ -19,7 +19,7 @@ export default function Topo() {
     }
 
     return (
-        <Header>
+        <Header data-test="header">
             <h1>TrackIt</h1>
             <img src={user.image} alt="imagem usuario" />
         </Header>

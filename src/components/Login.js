@@ -28,6 +28,7 @@ export default function Login() {
                 <form onSubmit={handleSubmit}>
                     <div>
                         <input
+                            data-test="email-input"
                             type="email"
                             placeholder="email"
                             name="email"
@@ -38,6 +39,7 @@ export default function Login() {
                     </div>
                     <div>
                         <input
+                            data-test="password-input"
                             type="password"
                             placeholder="senha"
                             name="password" 
@@ -48,6 +50,7 @@ export default function Login() {
                     </div>
 
                     <button 
+                    data-test="login-btn"
                     type="submit" 
                     disabled={loading}> 
                     {
@@ -64,7 +67,11 @@ export default function Login() {
                     </button>
                 </form>
             </Form>
-            <Link to='/cadastro'>Não tem uma conta? Cadastre-se</Link>
+            <Link 
+            data-test="signup-link" 
+            to='/cadastro'
+            >
+            Não tem uma conta? Cadastre-se</Link>
         </LoginContainer>
 
     )

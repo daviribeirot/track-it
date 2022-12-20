@@ -9,9 +9,9 @@ export default function Footer() {
     const {value} = useContext(LoginContext);
 
     return (
-        <FooterContainer>
-            <Link to='/habitos'>Hábitos</Link>
-            <Link to="/hoje">
+        <FooterContainer data-test="menu">
+            <Link to='/habitos' data-test="habit-link">Hábitos</Link>
+            <Link to="/hoje" data-test="today-link">
                 <ContainerCircle>
                     <CircularProgressbar
                         value={value ? value : 0}
@@ -27,7 +27,11 @@ export default function Footer() {
                     />
                 </ContainerCircle>
             </Link>
-            <Link to='/historico'>Histórico</Link>
+            <Link 
+            to='/historico'
+            data-test="history-link"
+            >
+                Histórico</Link>
         </FooterContainer>
     )
 }

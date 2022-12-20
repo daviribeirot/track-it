@@ -90,10 +90,11 @@ export default function Habitos() {
                     key={id}
                 >
                     <HabitContainer>
-                        <h1>{h.name}</h1>
+                        <h1 data-test="habit-name">{h.name}</h1>
                         <Week>
                             {weekdays.map((d, id) =>
                                 <ButtonWeek
+                                    data-test="habit-day"
                                     color={h.days.includes(id) ? "#DBDBDB" : "#FFFFFF"}
                                     font={h.days.includes(id) ? "#FFFFFF" : "#DBDBDB"}
                                     key={id}
@@ -104,6 +105,7 @@ export default function Habitos() {
                         </Week>
                     </HabitContainer>
                     <Trash
+                        data-test="habit-delete-btn"
                         onClick={() => handleDelete(h.id)}
                     >
                         <ion-icon name="trash-outline"></ion-icon>
@@ -121,6 +123,7 @@ export default function Habitos() {
                 <MyHabits>
                     <span>Meus Hábitos</span>
                     <button
+                        data-test="habit-create-btn"
                         onClick={() => {
                             setAddHabits(true)
                             setForm("")
@@ -131,8 +134,9 @@ export default function Habitos() {
                     </button>
                 </MyHabits>
                 {addHabits ?
-                    <AddHabit>
+                    <AddHabit data-test="habit-create-container">
                         <input
+                            data-test="habit-name-input"
                             type="text"
                             placeholder="nome hábito"
                             value={form}
@@ -141,6 +145,7 @@ export default function Habitos() {
                         <Form>
                             {weekdays.map((d, id) =>
                                 <ButtonWeek
+                                    data-test="habit-day"
                                     color={days.includes(id) ? '#DBDBDB' : '#FFFFFF'}
                                     font={days.includes(id) ? '#FFFFFF' : '#DBDBDB'}
                                     key={id}
@@ -152,6 +157,7 @@ export default function Habitos() {
                         </Form>
                         <ButtonDiv>
                             <ButtonCancel
+                                data-test="habit-create-cancel-btn"
                                 onClick={() => setAddHabits(false)}
                             >
                                 Cancelar
@@ -168,6 +174,7 @@ export default function Habitos() {
                                 </SaveButton>
                                 :
                                 <SaveButton
+                                    data-test="habit-create-save-btn"
                                     onClick={handleSubmit}
                                 >
                                     Salvar
@@ -181,7 +188,7 @@ export default function Habitos() {
                     {getHabits.length === 0 ?
                         <p>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</p>
                         :
-                        <ListaHabito />
+                        <ListaHabito data-test="habit-container"/>
                     }
                 </Text>
             </Container>

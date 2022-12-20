@@ -42,6 +42,7 @@ export default function Cadastro(){
                 <form onSubmit={sendData}>
                     <div>
                         <input 
+                        data-test="email-input"
                         name="email" 
                         type="email" 
                         placeholder="email" 
@@ -50,6 +51,7 @@ export default function Cadastro(){
                         value={form.email} />
 
                         <input 
+                        data-test="password-input"
                         name="password" 
                         type="password" 
                         placeholder="senha" 
@@ -58,6 +60,7 @@ export default function Cadastro(){
                         value={form.password} />
 
                         <input 
+                        data-test="user-name-input"
                         name="name" 
                         type="text" 
                         placeholder="nome" 
@@ -65,13 +68,14 @@ export default function Cadastro(){
                         value={form.name} />
 
                         <input 
+                        data-test="user-image-input"
                         name="image" 
                         type="url" 
                         placeholder="url foto" 
                         onChange={handleForm} 
                         value={form.image} />
                     </div>
-                    <button type="submit">{
+                    <button type="submit" data-test="signup-btn">{
                         loading
                             ? <ThreeDots
                             height = "50"
@@ -84,7 +88,7 @@ export default function Cadastro(){
                     }</button>
                 </form>
             </Form>
-            <Link to='/'>Já tem uma conta? Faça login!</Link>
+            <Link to='/' data-test="login-link">Já tem uma conta? Faça login!</Link>
         </CadastroContainer>
 
     )
