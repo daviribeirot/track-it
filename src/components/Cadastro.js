@@ -3,9 +3,11 @@ import logo from "../assets/images/logotrackit.png"
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
+import { ThreeDots } from "react-loader-spinner";
 
 export default function Cadastro(){
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
     const [form, setForm] = useState({
         email: "",
         name: "",
@@ -15,14 +17,16 @@ export default function Cadastro(){
 
     function sendData(e) {
         e.preventDefault();
+        setLoading(true)
         axios
             .post(
                 "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up", form)
             .then((res) => {
+                setLoading(false)
                 navigate("/");
-            
             })
             .catch((err) => {
+                setLoading(false)
                 alert(err.response.data.message);
             });
     }
@@ -37,19 +41,47 @@ export default function Cadastro(){
             <Form>
                 <form onSubmit={sendData}>
                     <div>
-                        <input name="email" type="email" placeholder="email" onChange={handleForm}
-                            value={form.email} />
+                        <input 
+                        name="email" 
+                        type="email" 
+                        placeholder="email" 
+                        onChange={handleForm} 
+                        disabled={loading}
+                        value={form.email} />
 
-                        <input name="password" type="password" placeholder="senha" onChange={handleForm}
-                            value={form.password} />
+                        <input 
+                        name="password" 
+                        type="password" 
+                        placeholder="senha" 
+                        onChange={handleForm} 
+                        disabled={loading}
+                        value={form.password} />
 
-                        <input name="name" type="text" placeholder="nome" onChange={handleForm}
-                            value={form.name} />
+                        <input 
+                        name="name" 
+                        type="text" 
+                        placeholder="nome" 
+                        onChange={handleForm} 
+                        value={form.name} />
 
-                        <input name="image" type="url" placeholder="url foto" onChange={handleForm}
-                            value={form.image} />
+                        <input 
+                        name="image" 
+                        type="url" 
+                        placeholder="url foto" 
+                        onChange={handleForm} 
+                        value={form.image} />
                     </div>
-                    <button type="submit">Cadastrar</button>
+                    <button type="submit">{
+                        loading
+                            ? <ThreeDots
+                            height = "50"
+                            width = "50"
+                            radius = "9"
+                            color = "white"
+                            ariaLabel = 'three-dots-loading'     
+                          />
+                            : "Cadastrar"
+                    }</button>
                 </form>
             </Form>
             <Link to='/'>Já tem uma conta? Faça login!</Link>
@@ -120,3 +152,4 @@ button{
     line-height: 26px;
 }
 `
+

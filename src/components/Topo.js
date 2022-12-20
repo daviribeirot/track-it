@@ -3,7 +3,7 @@ import { useLoginProvider } from "../contexts/LoginContext";
 
 export default function Topo() {
 
-    const { user, handleLogin } = useLoginProvider();
+    const { user } = useLoginProvider();
     const savedImage = localStorage.getItem("keepUser");
 
     if (savedImage) {
@@ -29,11 +29,11 @@ export default function Topo() {
 
 const Header = styled.div`
 width: 100%;
-height: 70px;
+height: 80px;
 position: fixed;
 left: 0px;
 top: 0px;
-
+z-index: 2;
 display: flex;
 align-items: center;
 justify-content: space-between;
@@ -48,7 +48,6 @@ h1{
     font-size: 38.982px;
     line-height: 49px;
     color: #FFFFFF;
-
     margin-left: 15px;
 }
 

@@ -6,6 +6,7 @@ export const LoginContext = createContext();
 export default function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState("");
+  const [value, setValue	] = useState(0);
 
 
   const handleLogin = async (email, password) => {
@@ -20,11 +21,8 @@ export default function AuthProvider({ children }) {
     setToken(response.data.token);
   }
 
-  console.log(token);
-
-
   return (
-    <LoginContext.Provider value={{ handleLogin, user, token }}>
+    <LoginContext.Provider value={{ handleLogin, user, token, value, setValue }}>
       {children}
     </LoginContext.Provider>
   );

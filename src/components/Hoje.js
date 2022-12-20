@@ -1,115 +1,157 @@
 import styled from "styled-components";
 import Topo from "./Topo";
 import Footer from "./Footer";
+import { LoginContext, useLoginProvider } from "../contexts/LoginContext";
+import axios from "axios";
+import { useContext, useEffect, useState } from "react";
+import dayjs from "dayjs";
+import { ThreeDots } from "react-loader-spinner";
 
 export default function Hoje() {
+    const { token } = useLoginProvider();
+    const {value, setValue} = useContext(LoginContext);
+
+    const [todayHabits, setTodayHabits] = useState([]);
+    const config = { headers: { Authorization: `Bearer ${token}` } }
+    require('dayjs/locale/pt-br')
+    const dia = dayjs().locale('pt-br').format("dddd, DD/MM");
+
+    function handlePercentage(habits){
+        const doneHabits = habits.filter((h) => h.done).length;
+        let percentage;
+   
+
+    if(habits.length === 0){
+        percentage = 0;
+    } else {
+        percentage = Math.round(doneHabits*100/(habits.length))
+    }
+
+    setValue(percentage);
+    }
+
+    useEffect(() => {
+        const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today"
+        const promise = axios.get(URL, config)
+        promise.then(habits => {
+            setTodayHabits([...habits.data]);
+            handlePercentage(habits.data);
+        })
+        promise.catch((err) => console.log(err.response.data))
+    }, [setTodayHabits, setValue])
+
+
+    function handleCheck(habit) {
+        const promise = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habit.id}/${habit.done ? "uncheck" : "check"}`, { id: habit.id }, config)
+        promise.then(() => setTodayHabits([...todayHabits.map(h => habit.id === h.id ? h.done = !habit.done : "")]))
+        promise.catch((err => console.log(err.response.data)));
+    }
 
     return (
         <>
             <Topo />
-            <HojeContainer>
-                <Title> Segunda, 17/05 </Title>
-                <Subtitle>Nenhum hábito concluído ainda</Subtitle>
-
-                <ul>
-                    <List>
-                        <div>
-                            <h3>Titulo Habito</h3>
-                            <span>Sequencia atual:</span>
-                            <br></br>
-                            <span>Sequencia atual:</span>
-                        </div>
-
-                        <DivIcon>
-                            <ion-icon name="checkbox"></ion-icon>
-                        </DivIcon>
-
-                    </List>
-                </ul>
-            </HojeContainer>
+            <DivContainer>
+                <Container>
+                    <Title>{dia}</Title>
+                    <p color={value === 0}>{value && value === 0
+                        ?
+                        "Nenhum hábito concluído ainda"
+                        :
+                        `${value}% dos hábitos concluídos`}
+                    </p>
+                </Container>
+                {!todayHabits ? (
+                    <ThreeDots color="white" />
+                ) : todayHabits.length === 0 ? (
+                    <span>Não há hábitos para trackear hoje</span>
+                ) : (
+                    todayHabits.map((habit) => (
+                        <HabitContainer
+                            key={habit.id}
+                            done={habit.done}
+                        >
+                            <div>
+                                <HabitName>{habit.name}</HabitName>
+                                <HabitSequence>{`Sequência atual: ${habit.currentSequence} dia(s)`}</HabitSequence>
+                                <HabitSequence>{`Seu recorde: ${habit.highestSequence} dia(s)`}</HabitSequence>
+                            </div>
+                            <button onClick={() => handleCheck(habit)}>
+                                <ion-icon name="checkbox"></ion-icon>
+                            </button>
+                        </HabitContainer>
+                    ))
+                )}
+            </DivContainer>
             <Footer />
         </>
     )
 
 }
-
-const HojeContainer = styled.div`
-    height: 90vh;
-    width: 100%;
-    background: #F2F2F2;
+const DivContainer = styled.div`
+    font-family: 'Lexend Deca';    
     display: flex;
     flex-direction: column;
-    align-items: center;
+    height: calc(100vh - 120px);
+    width: 100%;
+    overflow: scroll;
+    background-color: #F2F2F2;
 `
 
-const Title = styled.h1`
-    margin-top: 100px;
-    width: 172px;
-    height: 29px;
+const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 20px;
+    p{
+        color: ${({color}) => color ? "BABABA" : "#8FC549"};
+    }
+`;
 
+const Title = styled.h1`
+    margin-top: 80px;
+    height: 29px;
     font-family: 'Lexend Deca';
     font-style: normal;
     font-weight: 400;
     font-size: 22.976px;
     line-height: 29px;
     color: #126BA5;
+;
 `
-const Subtitle = styled.h2`
-    width: 278px;
-    height: 22px;
-    font-family: 'Lexend Deca';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 17.976px;
-    line-height: 22px;
-    color: #BABABA;
-`
-
-const List = styled.li`
+const HabitContainer = styled.div`
+  display: flex;
+  background: white;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  padding: 10px;
+  font-size: 18px;
+  button {
     display: flex;
     align-items: center;
-    justify-content: space-around;
-
-    margin-top: 10px;
-    width: 340px;
-    height: 94px;
-
-    background: #FFFFFF;
-    border-radius: 5px;
-
-    h3 {
-        width: 208px;
-        height: 25px;
- 
-        font-family: 'Lexend Deca';
-        font-style: normal;
-        font-weight: 400;
-        font-size: 19.976px;
-        line-height: 25px;
-
-        color: #666666;
-    }
-
-    span {
-        width: 148px;
-        height: 32px;
-
-        font-family: 'Lexend Deca';
-        font-style: normal;
-        font-weight: 400;
-        font-size: 12.976px;
-        line-height: 16px;
-
-        color: #666666;
-    }
-`
-
-const DivIcon = styled.div`
-    ion-icon{
+    justify-content: center;
+    padding: 0;
+    cursor: pointer;
     width: 69px;
     height: 69px;
+    border: none;
+    border-radius: 5px;
+    background: none;
+  }
+  ion-icon {
+    font-size: 69px;
+    color: ${(props) => (props.done ? "#8FC549" : "#EBEBEB")};
+  }
+`;
 
-    color: #EBEBEB;
-    }
-
+const HabitName = styled.p`
+    margin-bottom: 5px;
+    overflow: hidden;
+`
+const HabitSequence = styled.p`
+    display: flex;
+    font-size: 13px;
+    gap: 5px;
+    line-height: 16px;
 `

@@ -1,18 +1,22 @@
 import styled from "styled-components";
 import logo from "../assets/images/logotrackit.png"
 import { Link, useNavigate } from "react-router-dom";
-import { useState, useEffect, useContext } from "react";
+import { useState } from "react";
 import { useLoginProvider } from "../contexts/LoginContext";
+import { ThreeDots } from 'react-loader-spinner'
 
 export default function Login() {
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
+    const [loading, setLoading] = useState(false);
     const [password, setPassword] = useState("");
-    const { user, handleLogin } = useLoginProvider();
+    const { handleLogin } = useLoginProvider();
 
     const handleSubmit = async (e) => {
+        setLoading(true)
         e.preventDefault();
         await handleLogin(email, password);
+        setLoading(false)
         navigate("/hoje")
     };
 
@@ -23,12 +27,41 @@ export default function Login() {
             <Form>
                 <form onSubmit={handleSubmit}>
                     <div>
-                        <input type="email" placeholder="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                        <input
+                            type="email"
+                            placeholder="email"
+                            name="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            disabled={loading}
+                            required />
                     </div>
                     <div>
-                        <input type="password" placeholder="senha" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                        <input
+                            type="password"
+                            placeholder="senha"
+                            name="password" 
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            disabled={loading}
+                            required />
                     </div>
-                    <button type="submit">Entrar</button>
+
+                    <button 
+                    type="submit" 
+                    disabled={loading}> 
+                    {
+                        loading
+                            ? <ThreeDots
+                            height = "50"
+                            width = "50"
+                            radius = "9"
+                            color = 'white'
+                            ariaLabel = 'three-dots-loading'     
+                          />
+                            : "Entrar"
+                    }
+                    </button>
                 </form>
             </Form>
             <Link to='/cadastro'>Não tem uma conta? Cadastre-se</Link>
@@ -98,5 +131,6 @@ button{
     color: #FFFFFF;
     font-size: 20.976px;
     line-height: 26px;
+    opacity: ${(props) => props.disabled ? 0.7 : 1};
 }
 `

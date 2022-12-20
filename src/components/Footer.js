@@ -2,15 +2,19 @@ import styled from "styled-components";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { Link } from "react-router-dom";
+import { LoginContext, useLoginProvider } from "../contexts/LoginContext";
+import { useContext } from "react";
 
 export default function Footer() {
+    const {value} = useContext(LoginContext);
+
     return (
         <FooterContainer>
             <Link to='/habitos'>Hábitos</Link>
             <Link to="/hoje">
                 <ContainerCircle>
                     <CircularProgressbar
-                        value={50}
+                        value={value ? value : 0}
                         text={"Hoje"}
                         background
                         backgroundPadding={6}
@@ -29,7 +33,7 @@ export default function Footer() {
 }
 
 const FooterContainer = styled.div`
-    position: absolute;
+    position: fixed;
     width: 100%;
     height: 70px;
     left: 0px;
@@ -54,7 +58,6 @@ const FooterContainer = styled.div`
     }
 
 `
-
 const ContainerCircle = styled.div`
     margin-bottom: 15px;
     width: 80px;
